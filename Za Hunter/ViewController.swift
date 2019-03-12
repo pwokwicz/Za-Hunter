@@ -35,7 +35,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
         let request = MKLocalSearch.Request()
-        request.naturalLanguageQuery = "Pizza"
+        request.naturalLanguageQuery = "pizza"
         request.region = region
         let search = MKLocalSearch (request: request)
         search.start { (response, Error) in
@@ -48,6 +48,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
                 }
             }
         }
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation {
+            return nil
+        }
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: "pin")
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pinView")
+            pinView?.canShowCallout = true
+            pinView?.rightCalloutAccessoryView = UIButton (type: .infoLight)
+        }
+        else {
+            pinView?.annotation = annotation
+        }
+        return pinView
     }
 }
 
