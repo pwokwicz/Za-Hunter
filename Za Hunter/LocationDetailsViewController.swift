@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import SafariServices
 
 class LocationDetailsViewController: UIViewController {
     @IBOutlet weak var nameLabel: UILabel!
@@ -16,10 +17,22 @@ class LocationDetailsViewController: UIViewController {
     
     var selectedMapItem = MKMapItem()
 
+    @IBAction func onDirectionsButtonTapped(_ sender: UIButton) {
+        let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeWalking]
+        MKMapItem.openMaps(with: [selectedMapItem], launchOptions: launchOptions)
+    }
+    
+    @IBAction func onWebsiteButtonTapped(_ sender: Any) {
+        if let url = selectedMapItem.url {
+            present(SFSafariViewController(url: url), animated: true)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print(selectedMapItem.name!)
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         nameLabel.text = selectedMapItem.placemark.name
         var address = selectedMapItem.placemark.subThoroughfare! + ""
